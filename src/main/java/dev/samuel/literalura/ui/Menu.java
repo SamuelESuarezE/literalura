@@ -1,6 +1,8 @@
 package dev.samuel.literalura.ui;
 
 import dev.samuel.literalura.model.Book;
+import dev.samuel.literalura.service.AuthorService;
+import dev.samuel.literalura.service.BookService;
 import dev.samuel.literalura.service.GutendexApiService;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +14,13 @@ public class Menu {
     private final Scanner scanner = new Scanner(System.in);
 
     private final GutendexApiService gutendexApiService;
+    private final BookService bookService;
+    private final AuthorService authorService;
 
-    public Menu(GutendexApiService gutendexApiService) {
+    public Menu(GutendexApiService gutendexApiService, BookService bookService, AuthorService authorService) {
         this.gutendexApiService = gutendexApiService;
+        this.bookService = bookService;
+        this.authorService = authorService;
     }
 
     public void displayMenu() {
@@ -70,8 +76,9 @@ public class Menu {
     }
 
     public void seeRegisteredBooks() {
-
+        bookService.getAllBooks().forEach(System.out::println);
     }
+
     public void seeRegisteredAuthors() {}
     public void seeAuthorsAliveInADeterminedYear() {}
     public void seeBooksByLanguage() {}

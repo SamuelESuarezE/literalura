@@ -4,6 +4,8 @@ import dev.samuel.literalura.model.Book;
 import dev.samuel.literalura.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
 
@@ -13,5 +15,7 @@ public class BookService {
         this.repository = repository;
     }
 
-
+    public List<Book> getAllBooks() {
+        return repository.findAll();
+    }
 }
