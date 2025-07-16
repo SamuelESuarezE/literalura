@@ -1,5 +1,6 @@
 package dev.samuel.literalura.model;
 
+import dev.samuel.literalura.dto.AuthorDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,26 +12,26 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String birthYear;
-    private String deathYear;
+    private Integer birthYear;
+    private Integer deathYear;
 
     protected Author() {}
 
-    public Author(String name, String birthYear, String deathYear) {
-        this.name = name;
-        this.birthYear = birthYear;
-        this.deathYear = deathYear;
+    public Author(AuthorDTO authorDTO) {
+        this.name = authorDTO.name();
+        this.birthYear = authorDTO.birthYear();
+        this.deathYear = authorDTO.deathYear();
     }
 
     public String getName() {
         return name;
     }
 
-    public String getBirthYear() {
+    public Integer getBirthYear() {
         return birthYear;
     }
 
-    public String getDeathYear() {
+    public Integer getDeathYear() {
         return deathYear;
     }
 }

@@ -1,11 +1,12 @@
 package dev.samuel.literalura.model;
 
+import dev.samuel.literalura.dto.AuthorDTO;
+import dev.samuel.literalura.dto.BookDTO;
 import jakarta.persistence.*;
 
 @Entity
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String language;
@@ -16,10 +17,12 @@ public class Book {
 
     protected Book() {}
 
-    public Book(String title, String language, Integer downloads) {
-        this.title = title;
-        this.language = language;
-        this.downloads = downloads;
+    public Book(BookDTO bookDTO) {
+        this.id = bookDTO.id();
+        this.title = bookDTO.title();
+        this.language = bookDTO.languages().getFirst();
+        this.downloads = bookDTO.downloads();
+        this.author = new Author(bookDTO.authors().getFirst());
     }
 
     public String getTitle() {
@@ -32,5 +35,16 @@ public class Book {
 
     public Integer getDownloads() {
         return downloads;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", language='" + language + '\'' +
+                ", downloads=" + downloads +
+                ", author=" + author +
+                '}';
     }
 }
