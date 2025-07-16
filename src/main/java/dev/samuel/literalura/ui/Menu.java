@@ -69,7 +69,9 @@ public class Menu {
         }
     }
 
-    public void seeRegisteredBooks() {}
+    public void seeRegisteredBooks() {
+
+    }
     public void seeRegisteredAuthors() {}
     public void seeAuthorsAliveInADeterminedYear() {}
     public void seeBooksByLanguage() {}
