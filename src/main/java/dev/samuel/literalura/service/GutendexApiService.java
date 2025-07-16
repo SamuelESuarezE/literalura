@@ -1,9 +1,13 @@
 package dev.samuel.literalura.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.samuel.literalura.dto.AuthorDTO;
 import dev.samuel.literalura.dto.BookDTO;
 import dev.samuel.literalura.dto.GutendexResponseDTO;
+import dev.samuel.literalura.model.Author;
 import dev.samuel.literalura.model.Book;
+import dev.samuel.literalura.repository.AuthorRepository;
+import dev.samuel.literalura.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -20,10 +24,14 @@ public class GutendexApiService {
     private final HttpClient client;
     private final ObjectMapper mapper;
     private final String BASE_URL = "https://gutendex.com/books/?search=";
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
-    public GutendexApiService(HttpClient client, ObjectMapper mapper) {
+    public GutendexApiService(HttpClient client, ObjectMapper mapper, BookRepository bookRepository, AuthorRepository authorRepository) {
         this.client = client;
         this.mapper = mapper;
+        this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
     }
 
     public Optional<Book> searchBookByTitle(String title) {
@@ -35,8 +43,19 @@ public class GutendexApiService {
         }
 
         BookDTO bookDTO = gutendexResponseDTO.results().getFirst();
+        AuthorDTO authorDTO = bookDTO.authors().getFirst();
 
-        return Optional.of(new Book(bookDTO));
+        if (bookRepository.existsByExternalId(bookDTO.id())) {
+            System.out.println("Book already exists.");
+            return Optional.empty();
+        }
+        Author author = authorRepository.findByName(authorDTO.name())
+                .orElseGet(() -> authorRepository.save(new Author(authorDTO)));
+
+        Book book = new Book(bookDTO, author);
+        bookRepository.save(book);
+
+        return Optional.of(book);
     }
 
     private GutendexResponseDTO getBookByTitleRequest(String title) {

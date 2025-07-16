@@ -1,10 +1,9 @@
 package dev.samuel.literalura.model;
 
 import dev.samuel.literalura.dto.AuthorDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Author {
@@ -14,6 +13,9 @@ public class Author {
     private String name;
     private Integer birthYear;
     private Integer deathYear;
+
+    @OneToMany(mappedBy = "author")
+    private List<Book> books;
 
     protected Author() {}
 
@@ -33,5 +35,15 @@ public class Author {
 
     public Integer getDeathYear() {
         return deathYear;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+        Author: %s
+        Birth date: %d
+        Death date: %d
+        Books: %s
+        """, name, birthYear, deathYear, books.stream().map(Book::getTitle).toList());
     }
 }
