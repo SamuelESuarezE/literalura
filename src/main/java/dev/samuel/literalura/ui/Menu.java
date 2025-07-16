@@ -79,7 +79,11 @@ public class Menu {
         bookService.getAllBooks().forEach(System.out::println);
     }
 
-    public void seeRegisteredAuthors() {}
+    public void seeRegisteredAuthors() {
+        authorService.getAllAuthorsWithBooks().forEach(System.out::println);
+    }
+
+
     public void seeAuthorsAliveInADeterminedYear() {}
     public void seeBooksByLanguage() {}
 }
