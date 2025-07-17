@@ -18,4 +18,10 @@ public class BookService {
     public List<Book> getAllBooks() {
         return repository.findAll();
     }
+
+    public List<Book> getAllBooksByLanguage(String lang) {
+        var books = repository.findAllByLanguage(lang);
+        if (books.isEmpty()) { return null; }
+        return books;
+    }
 }

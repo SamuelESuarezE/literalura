@@ -6,6 +6,7 @@ import dev.samuel.literalura.service.BookService;
 import dev.samuel.literalura.service.GutendexApiService;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ public class Menu {
     private final GutendexApiService gutendexApiService;
     private final BookService bookService;
     private final AuthorService authorService;
+    private final List<String> allowedLanguages = List.of("es", "en", "fr", "pt");
 
     public Menu(GutendexApiService gutendexApiService, BookService bookService, AuthorService authorService) {
         this.gutendexApiService = gutendexApiService;
@@ -24,12 +26,14 @@ public class Menu {
     }
 
     public void displayMenu() {
+        System.out.println("");
         System.out.println("Welcome to Literalura!");
 
         var option = -1;
 
         while (option != 0) {
             System.out.println("""
+            
             Select an option:
             1. Search book by title
             2. See registered books
@@ -91,5 +95,30 @@ public class Menu {
         System.out.println("Authors alive in: " + year);
         authorService.getAuthorsAliveInDeterminedYear(year).forEach(System.out::println);
     }
-    public void seeBooksByLanguage() {}
+    public void seeBooksByLanguage() {
+        System.out.println("""
+        Enter the language to search the books:
+        es - Spanish
+        en - English
+        fr - French
+        pt - Portuguese
+        """);
+        var lang = scanner.nextLine();
+
+        if (!allowedLanguages.contains(lang)) {
+            System.out.println("Language not supported, please try again.");
+            return;
+        }
+
+        var books = bookService.getAllBooksByLanguage(lang);
+
+        if (books == null) {
+            System.out.println("No books found in " + lang);
+            return;
+        }
+
+        System.out.println("Books in " + lang);
+
+        books.forEach(System.out::println);
+    }
 }
