@@ -83,7 +83,13 @@ public class Menu {
         authorService.getAllAuthorsWithBooks().forEach(System.out::println);
     }
 
+    public void seeAuthorsAliveInADeterminedYear() {
+        System.out.println("Enter a year: ");
+        var year = scanner.nextInt();
+        scanner.nextLine();
 
-    public void seeAuthorsAliveInADeterminedYear() {}
+        System.out.println("Authors alive in: " + year);
+        authorService.getAuthorsAliveInDeterminedYear(year).forEach(System.out::println);
+    }
     public void seeBooksByLanguage() {}
 }

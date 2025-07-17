@@ -18,4 +18,8 @@ public class AuthorService {
     public List<Author> getAllAuthorsWithBooks() {
         return repository.findAllWithBooks();
     }
+
+    public List<Author> getAuthorsAliveInDeterminedYear(Integer year) {
+        return repository.findAllWithBooksAliveInYear(year);
+    }
 }
